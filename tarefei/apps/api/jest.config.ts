@@ -8,4 +8,9 @@ export default {
     '!src/**/config/*.ts',
   ],
   preset: 'ts-jest',
+  moduleFileExtensions: ["ts", "js", "json"],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/src/server.ts"
+  ],
 }
