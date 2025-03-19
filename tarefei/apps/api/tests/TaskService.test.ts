@@ -4,12 +4,22 @@ import request from 'supertest';
 import { app } from '../src/app';
 
 describe('General tests for Task Service', () => {
-  it('should be able to create a new task', async() => {
+  it('should be able to create a new task with complete request', async() => {
     const response = await request(app)
     .post('/tasks')
     .send({
       name: 'New task test example',
-      due_date: new Date('2035-04-01'),
+      due_date: '2035-04-01',
+      status: TaskStatus.HIGH
+    })
+    expect(response.status).toBe(201)
+  }),
+
+  it('should be able to create a new task with partial request', async() => {
+    const response = await request(app)
+    .post('/tasks')
+    .send({
+      name: 'New task test example',
       status: TaskStatus.HIGH
     })
     expect(response.status).toBe(201)
@@ -20,7 +30,7 @@ describe('General tests for Task Service', () => {
     .post('/tasks')
     .send({
       name: 'New task test example',
-      due_date: new Date('2015-04-01'),
+      due_date: '2015-04-01',
       status: TaskStatus.HIGH
     })
     expect(response.status).toBe(400)
@@ -31,7 +41,7 @@ describe('General tests for Task Service', () => {
     .post('/tasks')
     .send({
       name: 'New task test example',
-      due_date: new Date('2035-04-01'),
+      due_date: '2036-04-01',
       status: 'ERROR'
     })
     expect(response.status).toBe(400)
@@ -41,7 +51,7 @@ describe('General tests for Task Service', () => {
     const response = await request(app)
     .post('/tasks')
     .send({
-      due_date: new Date('2035-04-01'),
+      due_date: '2038-04-01',
       status: TaskStatus.HIGH
     })
     expect(response.status).toBe(400)
