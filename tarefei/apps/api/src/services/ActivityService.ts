@@ -47,6 +47,12 @@ class ActivityService {
             where: {id: activityFounded.id}
         })
     }
+
+    async deleteActivity(activityId: string) {
+        return prisma.activities.delete({
+            where: {id: activityId}
+        })
+    }
 }
 
 export const activityService = new ActivityService()

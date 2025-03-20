@@ -20,6 +20,16 @@ class ActivityController {
             response.status(400).json({ error: error.message })
         }
     }
+
+    async deleteActivity(request: Request, response: Response) {
+        try {
+            const {activityId} = request.params
+            await activityService.deleteActivity(activityId)
+            response.status(204).json('Activity deleted successfully')
+        } catch (error) {
+            response.status(400).json({ error: error.message })
+        }
+    }
 }
 
 export const activityController = new ActivityController()
