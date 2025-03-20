@@ -17,7 +17,12 @@ class TaskService {
 
     async getTaskById(taskId: string) {
         return await prisma.tasks.findUnique( {
-            where: {id : taskId}
+            where: {
+                id : taskId
+            },
+            include: {
+                activities: true
+            }
         })
     }
 
