@@ -39,6 +39,16 @@ class TaskController {
             response.status(400).json({ error: error.message })
         }
     }
+
+    async deleteTask(request: Request, response: Response) {
+        try {
+            const {taskId} = request.params
+            await taskService.deleteTask(taskId)
+            response.status(204).json('Task deleted successfully')
+        } catch (error) {
+            response.status(400).json({ error: error.message })
+        }
+    }
 }
 
 export const taskController = new TaskController()

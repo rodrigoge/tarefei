@@ -48,6 +48,12 @@ class TaskService {
             where: {id: taskFounded.id}
         })
     }
+
+    async deleteTask(taskId: string) {
+        return prisma.tasks.delete({
+            where: {id: taskId}
+        })
+    }
 }
 
 export const taskService = new TaskService()

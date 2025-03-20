@@ -18,7 +18,7 @@ model Activities {
   name   String
   active Boolean
   taskId String
-  task   Tasks   @relation(fields: [taskId], references: [id])
+  task   Tasks   @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 model Tasks {
