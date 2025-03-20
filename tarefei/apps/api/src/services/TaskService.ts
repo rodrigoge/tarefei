@@ -7,11 +7,11 @@ import validateStatus from "../utils/ValidateStatus";
 const prisma = new PrismaClient()
 
 class TaskService {
-    async createTask(data: TaskDTO) {
+    async createTask(task: TaskDTO) {
         return await prisma.tasks.create({ data: {
-            name: validateRequiredField('name', data.name).toString(),
-            due_date: validateDate(data.due_date),
-            status: validateStatus(data.status)
+            name: validateRequiredField('name', task.name).toString(),
+            due_date: validateDate(task.due_date),
+            status: validateStatus(task.status)
         }})
     }
 
@@ -31,6 +31,21 @@ class TaskService {
             include: {
                 activities: true
             }
+        })
+    }
+
+    async updateTask(taskId: string, task: TaskDTO) {
+        const taskFounded = await this.getTaskById(taskId)
+        if(!taskFounded) {
+            throw new Error('TaskID cannot be present')
+        }
+        return prisma.tasks.update({
+            data: {
+                name: validateRequiredField('name', task.name).toString(),
+                due_date: validateDate(task.due_date),
+                status: validateStatus(task.status)
+            },
+            where: {id: taskFounded.id}
         })
     }
 }
