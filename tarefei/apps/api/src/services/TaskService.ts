@@ -20,6 +20,14 @@ class TaskService {
             where: {id : taskId}
         })
     }
+
+    async getAllTasks() {
+        return await prisma.tasks.findMany({
+            include: {
+                activities: true
+            }
+        })
+    }
 }
 
 export const taskService = new TaskService()

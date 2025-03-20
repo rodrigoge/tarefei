@@ -10,6 +10,15 @@ class TaskController {
             response.status(400).json({ error: error.message })
         }
     }
+
+    async getTasks(request: Request, response: Response) {
+        try {
+            const tasks = await taskService.getAllTasks()
+            response.status(200).json(tasks)
+        } catch (error) {
+            response.status(400).json({ error: error.message })
+        }
+    }
 }
 
 export const taskController = new TaskController()
