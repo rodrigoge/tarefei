@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { TaskType } from "types/TaskType";
+import { TaskDTO } from "types/TaskDTO";
 import validateDate from "../utils/ValidateDate";
 import validateRequiredField from "../utils/ValidateRequiredField";
 import validateStatus from "../utils/ValidateStatus";
@@ -7,12 +7,18 @@ import validateStatus from "../utils/ValidateStatus";
 const prisma = new PrismaClient()
 
 class TaskService {
-    async createTask(data: TaskType) {
+    async createTask(data: TaskDTO) {
         return await prisma.tasks.create({ data: {
             name: validateRequiredField('name', data.name).toString(),
             due_date: validateDate(data.due_date),
             status: validateStatus(data.status)
         }})
+    }
+
+    async getTaskById(taskId: string) {
+        return await prisma.tasks.findUnique( {
+            where: {id : taskId}
+        })
     }
 }
 
