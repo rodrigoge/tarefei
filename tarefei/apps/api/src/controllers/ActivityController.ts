@@ -10,6 +10,16 @@ class ActivityController {
             response.status(400).json({ error: error.message })
         }
     }
+
+    async updateActivity(request: Request, response: Response) {
+        try {
+            const {activityId} = request.params
+            const task = await activityService.updateActivity(activityId, request.body)
+            response.status(200).json(task)
+        } catch (error) {
+            response.status(400).json({ error: error.message })
+        }
+    }
 }
 
 export const activityController = new ActivityController()

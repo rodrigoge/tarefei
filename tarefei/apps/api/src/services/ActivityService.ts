@@ -24,6 +24,29 @@ class ActivityService {
             taskId: activityRequest.taskId
         }})
     }
+
+    async getActivityById(activityId: string) {
+        return await prisma.activities.findUnique( {
+            where: {
+                id : activityId
+            }
+        })
+    }
+
+    async updateActivity(activityId: string, activity: ActivityDTO) {
+        const activityFounded = await this.getActivityById(activityId)
+        if(!activityFounded) {
+            throw new Error('ActivityID cannot be present')
+        }
+        return prisma.activities.update({
+            data: {
+                name: activity.name,
+                active: activity.active,
+                taskId: activity.taskId
+            },
+            where: {id: activityFounded.id}
+        })
+    }
 }
 
 export const activityService = new ActivityService()
