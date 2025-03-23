@@ -1,8 +1,30 @@
 import colors from "@/assets/colors";
+import { handleGetRequest } from "@/service/api";
 import { MaterialIcons } from '@expo/vector-icons';
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useFonts } from 'expo-font';
+import { FlatList, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Home() {
+    const [fontsLoaded] = useFonts({
+        'Poppins-Light': require('../assets/fonts/Poppins-Light.ttf'),
+        'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+        'Poppins-Medium': require('../assets/fonts/Poppins-Medium.ttf'),
+        'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+        'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+    });
+
+    if (!fontsLoaded) {
+        return null;
+    }
+
+    const handleGetTasks: any = async () => {
+        try {
+            return await handleGetRequest('/tasks')
+        } catch (error) {
+            throw error
+        }
+    }
+
     return(
         <View style={styles.container}>
             <StatusBar backgroundColor={colors.black900} />
@@ -13,86 +35,29 @@ export default function Home() {
                 showsVerticalScrollIndicator={false} 
                 showsHorizontalScrollIndicator={false}
             >
-                <View style={styles.card}>
-                    <Text style={styles.titleCard}>
-                        Estudar sobre UI / UX
-                    </Text>
-                    <View style={styles.details}>
-                        <MaterialIcons name="query-builder" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>10 Março 2025</Text>
-                    </View>
-                    <View style={styles.details}>
-                        <MaterialIcons name="check-circle-outline" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>5/6 Atividades concluídas</Text>
-                    </View>
-                    <View style={styles.highStatusTag}>
-                        <Text style={styles.textTag}>Alta</Text>
-                    </View>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.titleCard}>
-                        Estudar sobre UI / UX
-                    </Text>
-                    <View style={styles.details}>
-                        <MaterialIcons name="query-builder" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>10 Março 2025</Text>
-                    </View>
-                    <View style={styles.details}>
-                        <MaterialIcons name="check-circle-outline" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>5/6 Atividades concluídas</Text>
-                    </View>
-                    <View style={styles.highStatusTag}>
-                        <Text style={styles.textTag}>Alta</Text>
-                    </View>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.titleCard}>
-                        Estudar sobre UI / UX
-                    </Text>
-                    <View style={styles.details}>
-                        <MaterialIcons name="query-builder" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>10 Março 2025</Text>
-                    </View>
-                    <View style={styles.details}>
-                        <MaterialIcons name="check-circle-outline" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>5/6 Atividades concluídas</Text>
-                    </View>
-                    <View style={styles.highStatusTag}>
-                        <Text style={styles.textTag}>Alta</Text>
-                    </View>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.titleCard}>
-                        Estudar sobre UI / UX
-                    </Text>
-                    <View style={styles.details}>
-                        <MaterialIcons name="query-builder" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>10 Março 2025</Text>
-                    </View>
-                    <View style={styles.details}>
-                        <MaterialIcons name="check-circle-outline" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>5/6 Atividades concluídas</Text>
-                    </View>
-                    <View style={styles.highStatusTag}>
-                        <Text style={styles.textTag}>Alta</Text>
-                    </View>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.titleCard}>
-                        Estudar sobre UI / UX
-                    </Text>
-                    <View style={styles.details}>
-                        <MaterialIcons name="query-builder" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>10 Março 2025</Text>
-                    </View>
-                    <View style={styles.details}>
-                        <MaterialIcons name="check-circle-outline" style={styles.iconDetails} />
-                        <Text style={styles.textDetails}>5/6 Atividades concluídas</Text>
-                    </View>
-                    <View style={styles.highStatusTag}>
-                        <Text style={styles.textTag}>Alta</Text>
-                    </View>
-                </View>
+                <FlatList
+                    data={handleGetTasks}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.card}>
+                            <Text style={styles.titleCard}>
+                                Estudar sobre UI / UX
+                            </Text> 
+                            <View style={styles.details}>
+                                <MaterialIcons name="query-builder" style={styles.iconDetails} />
+                                <Text style={styles.textDetails}>10 Março 2025</Text>
+                            </View>
+                            <View style={styles.details}>
+                                <MaterialIcons name="check-circle-outline" style={styles.iconDetails} />
+                                <Text style={styles.textDetails}>5/6 Atividades concluídas</Text>
+                            </View>
+                            <View style={styles.highStatusTag}>
+                                <Text style={styles.textTag}>Alta</Text>
+                            </View>
+                        </View>
+                    )}
+                    contentContainerStyle={{ paddingBottom: 80 }}
+                />
             </ScrollView>
             <TouchableOpacity style={styles.button}>
                 <Text style={styles.textButton}>
@@ -107,31 +72,30 @@ const styles = StyleSheet.create({
     container: {
         height: '100%',
         backgroundColor: colors.black900,
-        padding: 20
+        padding: 20,
     },
     titleText: {
         color: colors.white,
         fontSize: 24,
-        fontWeight: "600",
+        fontFamily: 'Poppins-SemiBold',
         lineHeight: 32,
         marginTop: 64,
         paddingBottom: 24
     },
     cards: {
         flex: 1,
-
     },
     card: {
         backgroundColor: colors.black600,
-        height: 150,
+        height: 160,
         marginTop: 32,
         borderRadius: 8,
         padding: 20,
     },
     titleCard: {
         fontSize: 20,
-        fontWeight: "600",
-        color: colors.white
+        color: colors.white,
+        fontFamily: 'Poppins-Medium',
     },
     details: {
         color: colors.gray,
@@ -147,6 +111,7 @@ const styles = StyleSheet.create({
     textDetails: {
         paddingLeft: 4,
         color: colors.gray,
+        fontFamily: 'Poppins-Regular'
     },
     highStatusTag: {
         marginTop: 12,
@@ -177,7 +142,7 @@ const styles = StyleSheet.create({
     },
     textTag: {
         color: colors.white,
-        fontWeight: "600"
+        fontFamily: 'Poppins-SemiBold'
     },
     button: {
         position: "absolute",
@@ -194,7 +159,7 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: colors.black900,
-        fontWeight: "900",
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: "Poppins-Bold"
     }
 });
